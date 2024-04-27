@@ -1,0 +1,87 @@
+openapi: "3.0.0"
+info:
+  title: "Price API"
+  version: "1.0.0"
+paths:
+  /prices:
+    get:
+      operationId: "getPrices"
+      summary: "Obtener el precio de un producto para una marca y fecha específica"
+      parameters:
+        - name: brandId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: "Operación exitosa"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PriceResponse"
+        400:
+          description: "Solicitud inválida"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        404:
+          description: "Precio no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: "Error inesperado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    PriceResponse:
+      type: object
+      properties:
+        brandId:
+          type: integer
+        productId:
+          type: integer
+        priceList:
+          type: integer
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: double
+        curr:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+        correlationId:
+          type: string
